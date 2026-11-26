@@ -86,6 +86,17 @@
       return 'room.html?room_id=' + encodeURIComponent(roomtype && roomtype.id);
     },
 
+    // 객실 미리보기(layout-map) 사용 여부.
+    // layout-map.html 이 404 로 보내는 기준(header-footer-loader checkPageEnabled)과 같아야 한다.
+    // 이 템플릿은 `sections[0].enabled === false` 일 때만 꺼짐이다(섹션이 없으면 켜짐).
+    // 헤더 ROOMS 의 「미리보기」 항목 / room.html 객실 탭의 「미리보기」 칸이 같은 기준을 쓴다.
+    isLayoutMapEnabled: function (data) {
+      var cf = (data && data.homepage && data.homepage.customFields) || {};
+      var page = cf.pages && cf.pages.layoutMap;
+      var section = page && page.sections && page.sections[0];
+      return !(section && section.enabled === false);
+    },
+
     isRoomMenuItemActive: function (item, currentId) {
       if (!item || !currentId) return false;
       return (item.roomtypes || []).some(function (rt) {
